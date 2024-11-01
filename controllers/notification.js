@@ -64,23 +64,24 @@ export const getNotifications = async (req, res, next) => {
     }
 };
 
-// Update a notification by ID
-export const updateNotification = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const { error, value } = updateNotificationValidator.validate(req.body);
-        if (error) {
-            return res.status(422).json({ error: error.details[0].message });
-        }
-        const updatedNotification = await notificationModel.findByIdAndUpdate(id, value, { new: true });
-        if (!updatedNotification) {
-            return res.status(404).json({ error: "Notification not found" });
-        }
-        res.status(200).json({ message: `Notification with ID ${id} updated successfully.`, data: updatedNotification });
-    } catch (error) {
-        next(error);
-    }
-};
+// // Update a notification by ID
+// export const updateNotification = async (req, res, next) => {
+//     try {
+//         const { id } = req.params;
+//         const { error, value } = updateNotificationValidator.validate(req.body);
+//         if (error) {
+//             return res.status(422).json({ error: error.details[0].message });
+//         }
+//         const updatedNotification = await notificationModel.findByIdAndUpdate(id, value, { new: true });
+//         if (!updatedNotification) {
+//             return res.status(404).json({ error: "Notification not found" });
+//         }
+//         res.status(200).json({ message: `Notification with ID ${id} updated successfully.`, data: updatedNotification });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
 
 // Delete a notification by ID
 export const deleteNotification = async (req, res, next) => {
