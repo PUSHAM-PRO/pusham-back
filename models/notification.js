@@ -1,4 +1,4 @@
-import { Schema, type } from "mongoose";
+import { Schema, Types } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
 
 const notificationSchema = new Schema({
@@ -20,21 +20,22 @@ const notificationSchema = new Schema({
         type: String,
         required: false
     },
+
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
         required: false 
     },
+
+    ticketId: {
+        type: String,
+        required: false
+    },
+
     status: {
         type: String,
         enum: ['Unread', 'Read'],
         default: 'Unread'
     },
-    timestamp: {
-        type: Date,
-        default: Date.now
-    },
-
     sentVia: {
         type: [String],
         enum: ['Push', 'WhatsApp', 'Email'],
