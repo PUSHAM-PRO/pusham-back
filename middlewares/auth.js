@@ -1,5 +1,5 @@
 import { expressjwt } from "express-jwt";
-
+import { UserModel } from "../models/usermodels.js";
 
 
 export const isAuthenticated = expressjwt({
