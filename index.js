@@ -4,6 +4,7 @@ import cors from "cors";
 
 import statusRouter from "./routes/statusRoutes.js";
 import userRouter from "./routes/userroute.js";
+import ticketRouter from "./routes/ticket.js";
 
 
 // connect mongodb
@@ -18,6 +19,7 @@ app.use(cors());
 
 app.use(userRouter);
 app.use(statusRouter);
+app.use(ticketRouter)
 
 //  listen for incoming requests
 const PORT = 3000;
