@@ -22,7 +22,7 @@ export const getTickets = async (req, res, next) => {
         // Fetch tickets from database
         const tickets = await TicketModel
             .find(JSON.parse(filter))
-            .sort(json.parse(sort))
+            // .sort(json.parse(sort))
             .limit(limit)
             .skip(skip);
         // Return response

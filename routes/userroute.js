@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { isauthenticated } from "../middlewares/auth.js";
+import { isAuthenticated} from "../middlewares/auth.js";
 import { deleteUser, getProfile, updateUserProfile, userLogin, userSignup } from "../controllers/userscontroller.js";
 
 
@@ -10,10 +10,10 @@ userRouter.post("/users/signup", userSignup);
 
 userRouter.post("/users/login", userLogin);
 
-userRouter.get("/users/me", isauthenticated, getProfile);
+userRouter.get("/users/me", isAuthenticated, getProfile);
 
-userRouter.patch("/users/me",isauthenticated, updateUserProfile);
+userRouter.patch("/users/me",isAuthenticated, updateUserProfile);
 
-userRouter.delete("/users/me", isauthenticated, deleteUser)
+userRouter.delete("/users/me", isAuthenticated, deleteUser)
 
 export default userRouter;
