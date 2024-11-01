@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const postNotification = Joi.object({
+export const postNotificationValidator = Joi.object({
     type: Joi.string()
         .valid('Scheduled', 'Real-time')
         .required()
@@ -37,7 +37,7 @@ export const postNotification = Joi.object({
         .label('Sent Via')
 });
 
-export const updateNotification = Joi.object({
+export const updateNotificationValidator = Joi.object({
     type: Joi.string()
         .valid('Scheduled', 'Real-time')
         .required()

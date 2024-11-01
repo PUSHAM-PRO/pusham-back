@@ -2,9 +2,13 @@ import { Schema, Types } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
 
 const notificationSchema = new Schema({
+    icon: {
+        type: String
+    },
+    
     type: {
         type: String,
-        enum: ['Scheduled', 'Real-time'],
+        enum: ['Ticket Update', 'Admin Message', 'Department Alert'],
         required: true
     },
     title:{
@@ -21,16 +25,6 @@ const notificationSchema = new Schema({
         required: false
     },
 
-    userId: {
-        type: String,
-        required: false 
-    },
-
-    ticketId: {
-        type: String,
-        required: false
-    },
-
     status: {
         type: String,
         enum: ['Unread', 'Read'],
@@ -38,9 +32,19 @@ const notificationSchema = new Schema({
     },
     sentVia: {
         type: [String],
-        enum: ['Push', 'WhatsApp', 'Email'],
+        enum: ['Push', 'Email'],
         required: true
-    }
+    },
+
+    userId: {
+        type: String,
+        required: false
+    },
+
+    ticketId: {
+        type: String,
+        required: false
+    },
 })
 
 notificationSchema.plugin(toJSON);
