@@ -9,6 +9,7 @@ const ticketSchema = new Schema({
     problem: { type: String, required: true },
     description: { type: String, required: true },
     photo: { type: String },
+    status: { type: String}
 },
     {
         timestamps: true

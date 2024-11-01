@@ -6,7 +6,8 @@ export const addTicketValidador = Joi.object({
     location:Joi.string().required(),
     problem:Joi.string().required(),
     description:Joi.string().required(),
-    photo:Joi.string()
+    photo:Joi.string(),
+    status:Joi.string()
 
 })
 
