@@ -2,6 +2,9 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 
+import statusRouter from "./routes/statusRoutes.js";
+import userRouter from "./routes/userroute.js";
+import ticketRouter from "./routes/ticket.js";
 
 
 // connect mongodb
@@ -12,13 +15,14 @@ const app = express();
 
 // use middlewares
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
-
-
+app.use(userRouter);
+app.use(statusRouter);
+app.use(ticketRouter)
 
 //  listen for incoming requests
-const PORT = 3000
+const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(`app is listening on port: ${PORT}`);
+  console.log(`app is listening on port: ${PORT}`);
 });
