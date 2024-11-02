@@ -1,4 +1,4 @@
-import { Schema, Types } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
 
 const notificationSchema = new Schema({
@@ -7,46 +7,47 @@ const notificationSchema = new Schema({
         enum: ['Ticket Update', 'Admin Message', 'Department Alert'],
         required: true
     },
-    title:{
+    title: {
         type: String,
         required: true,
     },
-    message:{
+    message: {
         type: String,
         required: true
     },
-
-    location:{
+    location: {
         type: String,
         required: false
     },
-
-   image: {
+    image: {
         type: String
     },
-
-    status: {
-        type: String,
-        enum: ['Unread', 'Read'],
-        default: 'Unread'
+    read: {
+        type: Boolean,
+        default: false
     },
     sentVia: {
         type: [String],
-        enum: ['Push', 'Email'],
+        validate: {
+            validator: (v) => v.every(value => ['Push', 'Email'].includes(value)),
+            message: props => `${props.value} is not a valid notification method.`
+        },
         required: true
     },
-
     userId: {
-        type: String,
+        type: Types.ObjectId,
+        ref: 'User',
         required: false
     },
-
     ticketId: {
-        type: String,
+        type: Types.ObjectId,
+        ref: 'Ticket',
         required: false
-    },
-})
+    }
+}, {
+    timestamps: true
+});
 
 notificationSchema.plugin(toJSON);
 
-export const notificationModel = model('Notification', notificationSchema);
+export const NotificationModel = model('Notification', notificationSchema);

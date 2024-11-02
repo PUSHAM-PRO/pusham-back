@@ -28,11 +28,11 @@ export const postNotificationValidator = Joi.object({
         .label('Notification Status'),
 
     timestamp: Joi.date()
-        .default(Date.now)
+        .default(() => Date.now())
         .label('Timestamp'),
 
     sentVia: Joi.array()
-        .items(Joi.string().valid('Push', 'WhatsApp', 'Email'))
+        .items(Joi.string().valid('Push', 'Email'))
         .required()
         .label('Sent Via')
 });
@@ -65,11 +65,11 @@ export const updateNotificationValidator = Joi.object({
         .label('Notification Status'),
 
     timestamp: Joi.date()
-        .default(Date.now)
+        .default(() => Date.now())
         .label('Timestamp'),
 
     sentVia: Joi.array()
-        .items(Joi.string().valid('Push', 'WhatsApp', 'Email'))
+        .items(Joi.string().valid('Push', 'Email'))
         .required()
         .label('Sent Via')
-})
+});
