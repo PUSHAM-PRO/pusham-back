@@ -1,5 +1,4 @@
-import { Schema, model } from "mongoose";
-import mongoose from "mongoose";
+import { Schema, Types } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
 
 const ticketSchema = new Schema({
@@ -9,7 +8,18 @@ const ticketSchema = new Schema({
     problem: { type: String, required: true },
     description: { type: String, required: true },
     photo: { type: String },
-    status: { type: String}
+    status: { type: String},
+    role: {
+        type: String,
+        enum: ['customer', 'agent', 'department', 'superadmin'],
+        required: true
+    },
+    notifications: [
+        {
+            type: Types.ObjectId,
+            ref: 'Notification'
+        }
+    ]
 },
     {
         timestamps: true
