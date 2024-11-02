@@ -1,4 +1,4 @@
-import { Schema, Types } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
 
 const ticketSchema = new Schema({
