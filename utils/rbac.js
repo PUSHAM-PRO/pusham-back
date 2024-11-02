@@ -38,7 +38,7 @@ export const permissions = [
     {
         role: 'superadmin',
         actions: ['message_agent',
-            'message_customer',
+            'message_customer',// not quite sure of the messaging but im thinking it would be linked to a post method for message/chat
             'message_agents',
             'message_customers',
             'message_department',
