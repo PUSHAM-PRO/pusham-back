@@ -9,10 +9,11 @@ const ticketSchema = new Schema(
     problem: { type: String, required: true },
     description: { type: String, required: true },
     photo: { type: String },
-    status: { type: String, enum: ["initialized", "in_progress", "completed"] },
+    status: { type: String, enum: ["initialized", "in_progress", "completed"], default: "initialized" },
     role: {
       type: String,
       enum: ["customer", "agent", "department", "superadmin"],
+      default: "customer",
       required: true,
     },
     notifications: [

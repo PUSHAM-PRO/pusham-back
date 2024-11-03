@@ -8,9 +8,12 @@ export const addTicket = async (req, res, next) => {
             return res.status(422).json(error)
         }
         // write ticket to database
-        await TicketModel.create(value);
+        const newTickets = await TicketModel.create({
+            ...value,
+            user: req.auth.id
+        });
         //respond to request
-        res.status(201).json('Ticket created');
+        res.status(201).json(newTickets);
     } catch (error) {
         next(error)
     }
