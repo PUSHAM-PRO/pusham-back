@@ -5,7 +5,7 @@ import {isAuthenticated} from "../middlewares/auth.js"
 const ticketRouter = Router();
 
 // Define routes
-ticketRouter.get('/tickets/count', countTickets),
+ticketRouter.get('/tickets/count', isAuthenticated, countTickets),
 ticketRouter.post('/tickets',isAuthenticated, addTicket),
 ticketRouter.get('/tickets', isAuthenticated, getTickets),
 ticketRouter.get('/tickets/:id', isAuthenticated, getticket),
