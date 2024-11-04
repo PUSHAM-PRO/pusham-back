@@ -1,4 +1,5 @@
 import { UserModel } from "../models/usermodels.js";
+import { mailTransporter } from "../utils/mail.js";
 import {
   userLoginValidator,
   userSignUpValidator,
@@ -24,6 +25,17 @@ export const userSignup = async (req, res, next) => {
     await UserModel.create({
       ...value,
       password: hashedpassword,
+    });
+    await mailTransporter.sendMail({
+      to: value.email,
+      subject: "User registration",
+      text: `${
+        value.name
+      } you registered with PUSHAM successfully, \nHere are your details,\n ${JSON.stringify(
+        value,
+        null,
+        2
+      )}`,
     });
     return res.status(200).json("User Registered Successfully");
   } catch (error) {
