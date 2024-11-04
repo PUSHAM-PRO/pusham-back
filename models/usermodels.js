@@ -8,12 +8,13 @@ const userSchema = new Schema(
     location: { type: String, required: true },
     password: { type: String, required: true },
     nationality: { type: String, required: true },
-    notifications: [
-      {
-        type: String,
-        // ref: 'Notification'
-      },
-    ],
+    phoneNumber: { type: Number },
+    // notifications: [
+    //   {
+    //     type: String,
+    //     // ref: 'Notification'
+    //   },
+    // ],
   },
   {
     timestamps: true,

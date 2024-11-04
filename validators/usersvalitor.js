@@ -4,7 +4,8 @@ export const userSignUpValidator = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required(),
     nationality: Joi.string().required(),
-    password: Joi.string().required()
+    password: Joi.string().required(),
+    location: Joi.string().required(),
 });
 
 export const userLoginValidator = Joi.object({
@@ -15,6 +16,5 @@ export const userLoginValidator = Joi.object({
 export const userUpdateValidator = Joi.object({
     name: Joi.string(),
     email: Joi.string(),
-    phoneNumber: Joi.string()
-   
+    phoneNumber: Joi.number()
 });
