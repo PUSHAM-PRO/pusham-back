@@ -1,6 +1,7 @@
 import Joi from "joi";
 
-export const addTicketValidador = Joi.object({
+export const addTicketValidator = Joi.object({
+  user: Joi.string().required(),
   department: Joi.string().required(),
   location: Joi.string().required(),
   problem: Joi.string().required(),
@@ -10,6 +11,7 @@ export const addTicketValidador = Joi.object({
 });
 
 export const updateTicketValidator = Joi.object({
+  user: Joi.string().required(),
   department: Joi.string(),
   location: Joi.string(),
   problem: Joi.string(),

@@ -1,22 +1,36 @@
 import { TicketModel } from "../models/ticket.js";
-import {
-  addTicketValidador,
-  updateTicketValidator,
-} from "../validators/ticket.js";
+import {addTicketValidator,updateTicketValidator,} from "../validators/ticket.js";
+import { mailTransporter } from "../utils/mail.js";
 
 export const addTicket = async (req, res, next) => {
   try {
-    const { error, value } = addTicketValidador.validate(req.body);
+    const { error, value } = addTicketValidator.validate(req.body);
     if (error) {
       return res.status(422).json(error);
     }
     // write ticket to database
-    const newTickets = await TicketModel.create({
+    const newTicket = await TicketModel.create({
       ...value,
       user: req.auth.id,
     });
+
+    // Store the time of profile update
+    // const ticketTime = new Date().toLocaleString();
+
+    const userEmail = req.auth.email; // Assume req.auth contains email as well
+    if (!userEmail) {
+      res.status(404).json("User email not found.");
+    }
+
+    // Send a notification about the ticket creation
+    await mailTransporter.sendMail({
+      to: userEmail,
+      subject: "User registration",
+      text: `Hello`,
+    });
+
     //respond to request
-    res.status(201).json(newTickets);
+    res.status(201).json(newTicket);
   } catch (error) {
     next(error);
   }
@@ -76,6 +90,16 @@ export const updateTicket = async (req, res, next) => {
     if (!updatedTicket) {
       res.status(404).json("Update wasn't successful");
     }
+
+    await mailTransporter.sendMail({
+      to: value.email,
+      subject: "Update Ticket",
+      text: `Hello ${value.name}, you have updated your PUSHAM ticket successfully, \nHere are your details,\n ${JSON.stringify(
+        value,
+        null,
+        2
+      )}`,
+    });
     res.status(200).json("Ticket updated");
   } catch (error) {
     next(error);
