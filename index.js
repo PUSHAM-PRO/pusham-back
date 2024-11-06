@@ -2,7 +2,6 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 
-import statusRouter from "./routes/statusRoutes.js";
 import userRouter from "./routes/userroute.js";
 import ticketRouter from "./routes/ticket.js";
 
@@ -18,7 +17,6 @@ app.use(express.json());
 app.use(cors());
 
 app.use(userRouter);
-app.use(statusRouter);
 app.use(ticketRouter)
 
 //  listen for incoming requests

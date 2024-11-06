@@ -12,7 +12,12 @@ export const addTicketValidador = Joi.object({
 })
 
 export const updateTicketValidator = Joi.object({
-    date:Joi.string().required(),
-    problem:Joi.string().required(),
-    description:Joi.string().required()
-})
+  // user: Joi.string().required(),
+  date: Joi.date(),
+  department: Joi.string(),
+  location: Joi.string(),
+  problem: Joi.string().required(),
+  description: Joi.string().required(),
+  photo: Joi.string(),
+  status: Joi.string(),
+});
