@@ -29,9 +29,7 @@ export const userSignup = async (req, res, next) => {
     await mailTransporter.sendMail({
       to: value.email,
       subject: "User registration",
-      text: `${
-        value.name
-      } you registered with PUSHAM successfully, \nHere are your details,\n ${JSON.stringify(
+      text: `Hello ${ value.name}, you have registered with PUSHAM successfully, \nHere are your details,\n ${JSON.stringify(
         value,
         null,
         2
@@ -61,12 +59,24 @@ export const userLogin = async (req, res, next) => {
       res.status(404).json("Invalid Credentials");
     }
     // now generate a token for the person
-    const token = jwt.sign({ id: user.id }, process.env.JWT_PRIVATE_KEY, {
+    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_PRIVATE_KEY, {
       expiresIn: "24h",
     });
+
+    //send response back to the user  with the access token
     res.json({
       message: "user logged in",
       accessToken: token,
+    });
+    //get current timestamp for the login
+const loginTime = new Date().toLocaleString();
+    //send a login confirmation to the user
+    await mailTransporter.sendMail({
+      to: user.email,
+      subject: "Login Notice",
+      text: `Hello ${user.name} we noticed you logged in at ${loginTime}.\n 
+      Welcome to Pusham \n 
+      If this was not from you, kindly change your password as soon as possible`,
     });
   } catch (error) {
     next(error);
@@ -100,6 +110,16 @@ export const updateUserProfile = async (req, res, next) => {
     if (!updatedVendor) {
       return res.status(404).json({ message: "user not found" });
     }
+    // Store the time of profile update
+    const updateTime = new Date().toLocaleString();
+
+    // Send a notification about profile update
+    await mailTransporter.sendMail({
+      to: updatedVendor.email,
+      subject: "Profile Update Notice",
+      text: `Hello ${updatedVendor.name}, your profile was successfully updated at ${updateTime}.`
+    });
+    
     //Send the updated vendor profile
     res.json("Profile updated successfully");
   } catch (error) {
@@ -110,12 +130,22 @@ export const updateUserProfile = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
   try {
     // Find the user by ID
-    const user = await UserModel.findOneAndDelete(req.auth.id);
+    const user = await UserModel.findOneAndDelete({ _id: req.auth.id });
 
     // If user is not found, send a 404 response
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
+    // Store the time of profile update
+    const deleteTime = new Date().toLocaleString();
+
+    // Send a notification about profile update
+    await mailTransporter.sendMail({
+      to: user.email,
+      subject: "Delete Account",
+      text: `Hello ${user.name}, you deletd your Pusham account at ${deleteTime}.`
+    });  
 
     // Send success response
     res.status(200).json({ message: "User deleted successfully" });

@@ -10,11 +10,13 @@ export const userSignUpValidator = Joi.object({
 
 export const userLoginValidator = Joi.object({
     email: Joi.string().required(),
-    password: Joi.string().required()
+    password: Joi.string().required(),
 });
 
 export const userUpdateValidator = Joi.object({
     name: Joi.string(),
     email: Joi.string(),
-    phoneNumber: Joi.number()
+    nationality: Joi.string(),
+    password: Joi.string(),
+    location: Joi.string()
 });
