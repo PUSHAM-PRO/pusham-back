@@ -3,7 +3,8 @@ import { toJSON } from "@reis/mongoose-to-json";
 
 const ticketSchema = new Schema(
   {
-    user: {type: Types.ObjectId, ref: "User"},
+    // user: {type: Types.ObjectId, ref: "User"},
+    date: { type: Date, default: Date.now },
     department: { type: String, required: true },
     location: { type: String, required: true },
     problem: { type: String, required: true },
