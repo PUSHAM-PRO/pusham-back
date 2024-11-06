@@ -6,6 +6,7 @@ export const userSignUpValidator = Joi.object({
     nationality: Joi.string().required(),
     password: Joi.string().required(),
     location: Joi.string().required(),
+    phoneNumber: Joi.string(),
 });
 
 export const userLoginValidator = Joi.object({
