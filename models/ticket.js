@@ -2,7 +2,7 @@ import { Schema, model, Types } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
 
 const ticketSchema = new Schema({
-    date: { type: String, required: true },
+    
     department: { type: String, required: true },
     location: { type: String, required: true },
     problem: { type: String, required: true },
@@ -13,6 +13,10 @@ const ticketSchema = new Schema({
         type: String,
         enum: ['customer', 'agent', 'department', 'superadmin'],
         required: true
+    },
+    category: {
+        type: String,
+        enum: ['technical support', 'billing', 'account management', 'sales enquiry']
     },
     notifications: [
         {
