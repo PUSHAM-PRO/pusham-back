@@ -1,10 +1,7 @@
 import { Schema, model, Types } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
 
-const ticketSchema = new Schema(
-  {
-    // user: {type: Types.ObjectId, ref: "User"},
-    date: { type: Date, default: Date.now },
+
 const ticketSchema = new Schema({
     
     department: { type: String, required: true },
