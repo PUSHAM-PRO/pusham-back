@@ -1,6 +1,10 @@
 import { Schema, model, Types } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
 
+const ticketSchema = new Schema(
+  {
+    // user: {type: Types.ObjectId, ref: "User"},
+    date: { type: Date, default: Date.now },
 const ticketSchema = new Schema({
     
     department: { type: String, required: true },
@@ -8,7 +12,7 @@ const ticketSchema = new Schema({
     problem: { type: String, required: true },
     description: { type: String, required: true },
     photo: { type: String },
-    status: { type: String},
+    status: { type: String, enum: ["initialized", "in_progress", "completed"], default: "initialized" },
     role: {
         type: String,
         enum: ['customer', 'agent', 'department', 'superadmin'],
@@ -19,18 +23,19 @@ const ticketSchema = new Schema({
         enum: ['technical support', 'billing', 'account management', 'sales enquiry']
     },
     notifications: [
-        {
-            type: Types.ObjectId,
-            ref: 'Notification'
-        }
-    ]
-},
-    {
-        timestamps: true
-    });
+      {
+        type: String,
+        // ref: 'Notification'
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
-ticketSchema.index({ name: 'text', title: 'text' });
+ticketSchema.index({ name: "text", title: "text" });
 
-ticketSchema.plugin(toJSON)
+ticketSchema.plugin(toJSON);
 
-export const TicketModel = model('ticket', ticketSchema);
+export const TicketModel = model("ticket", ticketSchema);
