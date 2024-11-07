@@ -2,7 +2,7 @@ import Joi from "joi";
 
 export const userSignUpValidator = Joi.object({
     name: Joi.string().required(),
-    email: Joi.string().required(),
+    email: Joi.string().email().required(),
     nationality: Joi.string().required(),
     password: Joi.string().required(),
     location: Joi.string().required(),
