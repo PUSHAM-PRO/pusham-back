@@ -33,22 +33,32 @@ export const addTicket = async (req, res, next) => {
   }
 };
 
-
 export const getTickets = async (req, res, next) => {
   try {
-    const { filter = "{}", sort = "{}", limit = 10, skip = 0 } = req.query;
-    const userFilter = { ...JSON.parse(filter), user: req.auth.id };
+    const { filter = "{}", sort = "{}", limit = 10, skip = 0, category } = req.query;
+    
+    // Merge category filter if it exists
+    // const userFilter = { ..., user: req.auth.id };
+    if (category) {
+      userFilter.category = category;
+    }
+
+    // console.log("Filter:", userFilter);  // Log the filter to see what is being sent to the database
+    
     // Fetch tickets from database
-    const tickets = await TicketModel.find(userFilter)
+    const tickets = await TicketModel
+    .find(JSON.parse(filter))
       .sort(JSON.parse(sort))
-      .limit(limit)
-      .skip(skip);
+      .limit(parseInt(limit))  // Ensure limit is an integer
+      .skip(parseInt(skip));   // Ensure skip is an integer
+    
     // Return response
     res.status(200).json(tickets);
   } catch (error) {
     next(error);
   }
 };
+
 
 export const countTickets = async (req, res, next) => {
   try {
@@ -179,6 +189,28 @@ export const completeTicket = async (req, res, next) => {
       text: `${state.problem} has been addressed. `,
     });
     return res.status(200).json(state);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getTicketCounts = async (req, res, next) => {
+  try {
+    // Count total tickets
+    const totalTickets = await TicketModel.countDocuments();
+
+    // Count tickets that are in progress
+    const inProgressTickets = await TicketModel.countDocuments({ status: 'in progress' });
+
+    // Count tickets that are completed
+    const completedTickets = await TicketModel.countDocuments({ status: 'completed' });
+
+    // Return counts to the client
+    res.status(200).json({
+      totalTickets,
+      inProgressTickets,
+      completedTickets
+    });
   } catch (error) {
     next(error);
   }
