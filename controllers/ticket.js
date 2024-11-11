@@ -44,7 +44,7 @@ export const getTickets = async (req, res, next) => {
       .limit(limit)
       .skip(skip);
     // Return response
-    res.status(200).json(tickets);
+    return res.status(200).json(tickets);
   } catch (error) {
     next(error);
   }
@@ -86,7 +86,7 @@ export const updateTicket = async (req, res, next) => {
       { new: true }
     );
     if (!updateTicket) {
-      res.status(404).json("Update wasn't successful");
+     return res.status(404).json("Update wasn't successful");
     }
     //Store time of ticket update
     const ticketTime = new Date().toLocaleString();
@@ -96,7 +96,7 @@ export const updateTicket = async (req, res, next) => {
       subject: "Ticket Update Successful",
       text: `You have successfully update your ticket with title: ${value.problem} and has been receive by ${value.department} at ${ticketTime} \n You will receive an alert once an agent attends to your or once the status changes.`,
     });
-    res.status(200).json("Ticket updated");
+     res.status(200).json("Ticket updated");
   } catch (error) {
     next(error);
   }
