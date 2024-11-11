@@ -1,75 +1,16 @@
-// import Joi from "joi";
+import Joi from 'joi';
 
-// export const postNotificationValidator = Joi.object({
-//     type: Joi.string()
-//         .valid('Scheduled', 'Real-time')
-//         .required()
-//         .label('Notification Type'),
+const notificationValidator = Joi.object({
+    type: Joi.string()
+        .valid('Ticket Update', 'Admin Message', 'Department Alert')
+        .required(),
+    title: Joi.string()
+        .required(),
+    message: Joi.string(),
+    location: Joi.string(),
+    image: Joi.string(),
+    read: Joi.boolean()
+        .default(false)
+});
 
-//     title: Joi.string()
-//         .required()
-//         .label('Notification Title'),
-
-//     message: Joi.string()
-//         .required()
-//         .label('Notification Message'),
-
-//     location: Joi.string()
-//         .optional()
-//         .label('Notification Location'),
-
-//     userId: Joi.string()
-//         .optional()
-//         .label('User ID'),
-
-//     status: Joi.string()
-//         .valid('Unread', 'Read')
-//         .default('Unread')
-//         .label('Notification Status'),
-
-//     timestamp: Joi.date()
-//         .default(() => Date.now())
-//         .label('Timestamp'),
-
-//     sentVia: Joi.array()
-//         .items(Joi.string().valid('Push', 'Email'))
-//         .required()
-//         .label('Sent Via')
-// });
-
-// export const updateNotificationValidator = Joi.object({
-//     type: Joi.string()
-//         .valid('Scheduled', 'Real-time')
-//         .required()
-//         .label('Notification Type'),
-
-//     title: Joi.string()
-//         .required()
-//         .label('Notification Title'),
-
-//     message: Joi.string()
-//         .required()
-//         .label('Notification Message'),
-
-//     location: Joi.string()
-//         .optional()
-//         .label('Notification Location'),
-
-//     userId: Joi.string()
-//         .optional()
-//         .label('User ID'),
-
-//     status: Joi.string()
-//         .valid('Unread', 'Read')
-//         .default('Unread')
-//         .label('Notification Status'),
-
-//     timestamp: Joi.date()
-//         .default(() => Date.now())
-//         .label('Timestamp'),
-
-//     sentVia: Joi.array()
-//         .items(Joi.string().valid('Push', 'Email'))
-//         .required()
-//         .label('Sent Via')
-// });
+export default notificationValidator;

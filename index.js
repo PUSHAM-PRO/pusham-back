@@ -4,6 +4,7 @@ import cors from "cors";
 
 import userRouter from "./routes/userroute.js";
 import ticketRouter from "./routes/ticket.js";
+import notificationRouter from "./routes/notification.js";
 
 
 // connect mongodb
@@ -17,7 +18,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use(userRouter);
-app.use(ticketRouter)
+app.use(ticketRouter);
+app.use(notificationRouter);
 
 //  listen for incoming requests
 const PORT = 3000;
