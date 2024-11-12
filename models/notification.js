@@ -15,9 +15,7 @@ const notificationSchema = new Schema({
         type: String,
         required: true
     },
-    location: {
-        type: String,
-        required: false
+    location: {type: String
     },
     image: {
         type: String
@@ -26,25 +24,9 @@ const notificationSchema = new Schema({
         type: Boolean,
         default: false
     },
-    // sentVia: {
-    //     type: [String],
-    //     validate: {
-    //         validator: (v) => v.every(value => ['Push', 'Email'].includes(value)),
-    //         message: props => `${props.value} is not a valid notification method.`
-    //     },
-    //     required: true
-    // },
-    userId: {
-        type: Types.ObjectId,
-        ref: 'User',
-        required: false
-    },
-    ticketId: {
-        type: Types.ObjectId,
-        ref: 'Ticket',
-        required: false
-    }
-}, {
+
+}, 
+{
     timestamps: true
 });
 
