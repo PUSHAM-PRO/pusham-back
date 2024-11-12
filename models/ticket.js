@@ -12,7 +12,7 @@ const ticketSchema = new Schema({
     role: {
         type: String,
         enum: ['customer', 'agent', 'department', 'superadmin'],
-        required: true
+         default: 'customer'
     },
     category: {
         type: String,

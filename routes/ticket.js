@@ -5,6 +5,7 @@ import {
   countTickets,
   deleteTicket,
   getticket,
+  getTicketCounts,
   getTickets,
   progressTicket,
   updateTicket,
@@ -22,5 +23,6 @@ ticketRouter.patch("/tickets/:id", isAuthenticated, updateTicket);
 ticketRouter.delete("/tickets/:id", isAuthenticated, deleteTicket);
 ticketRouter.patch("/tickets/pro/:id", isAuthenticated, progressTicket);
 ticketRouter.patch("/tickets/com/:id", isAuthenticated, completeTicket);
+ticketRouter.get('/tickets-stats', isAuthenticated, getTicketCounts);
 
 export default ticketRouter;
