@@ -1,5 +1,8 @@
 import { TicketModel } from "../models/ticket.js";
-import { addTicketValidator, updateTicketValidator, } from "../validators/ticket.js";
+import {
+  addTicketValidator,
+  updateTicketValidator,
+} from "../validators/ticket.js";
 import { mailTransporter } from "../utils/mail.js";
 
 export const addTicket = async (req, res, next) => {
@@ -33,13 +36,15 @@ export const addTicket = async (req, res, next) => {
   }
 };
 
-
 export const getTickets = async (req, res, next) => {
   try {
-    const { filter = "{}", sort = "{}", limit = 10, skip = 0 } = req.query;
-    const userFilter = { ...JSON.parse(filter), user: req.auth.id };
+    const { filter = "{ }", sort = "{ }", limit = 10, skip = 0 } = req.query;
     // Fetch tickets from database
-    const tickets = await TicketModel.find(userFilter)
+
+    const tickets = await TicketModel.find({
+      ...JSON.parse(filter),
+      user: req.auth.id,
+    })
       .sort(JSON.parse(sort))
       .limit(limit)
       .skip(skip);
@@ -102,7 +107,6 @@ export const updateTicket = async (req, res, next) => {
   }
 };
 
-
 export const deleteTicket = async (req, res, next) => {
   try {
     const deletedTicket = await TicketModel.findOneAndDelete(req.body.id);
@@ -129,14 +133,13 @@ export const deleteTicket = async (req, res, next) => {
   }
 };
 
-
 // updating ticket status to in_progress
 export const progressTicket = async (req, res, next) => {
   try {
     const state = await TicketModel.findById(req.params.id);
     // Check if the ticket exists and if its status is "initialized"
     if (!state || state.status !== "initialized") {
-      console.log(state)
+      console.log(state);
       return res.status(400).json("Invalid ticket status");
     }
     // Update the ticket status to "in_progress"
@@ -152,7 +155,7 @@ export const progressTicket = async (req, res, next) => {
       subject: "Ticket Status Update",
       text: `Your ticket titled "${state.problem}" has been updated to "in_progress".`,
     });
-   
+
     return res.status(200).json(state);
   } catch (error) {
     next(error);
@@ -169,8 +172,8 @@ export const completeTicket = async (req, res, next) => {
     await state.save();
 
     // Check if user email is available
-    if(!req.auth.email) {
-      return res.status(400).json("User email not found")
+    if (!req.auth.email) {
+      return res.status(400).json("User email not found");
     }
     // Send a notification email about the ticket deletion
     await mailTransporter.sendMail({

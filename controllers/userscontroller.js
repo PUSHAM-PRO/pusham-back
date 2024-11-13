@@ -7,6 +7,7 @@ import {
 } from "../validators/usersvalitor.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import admin from "firebase-admin";
 
 export const userSignup = async (req, res, next) => {
   try {
@@ -29,7 +30,9 @@ export const userSignup = async (req, res, next) => {
     await mailTransporter.sendMail({
       to: value.email,
       subject: "User registration",
-      text: `Hello ${ value.name}, you have registered with PUSHAM successfully, \nHere are your details,\n ${JSON.stringify(
+      text: `Hello ${
+        value.name
+      }, you have registered with PUSHAM successfully, \nHere are your details,\n ${JSON.stringify(
         value,
         null,
         2
@@ -59,9 +62,13 @@ export const userLogin = async (req, res, next) => {
       res.status(404).json("Invalid Credentials");
     }
     // now generate a token for the person
-    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_PRIVATE_KEY, {
-      expiresIn: "24h",
-    });
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_PRIVATE_KEY,
+      {
+        expiresIn: "24h",
+      }
+    );
 
     //send response back to the user  with the access token
     res.json({
@@ -69,7 +76,7 @@ export const userLogin = async (req, res, next) => {
       accessToken: token,
     });
     //get current timestamp for the login
-const loginTime = new Date().toLocaleString();
+    const loginTime = new Date().toLocaleString();
     //send a login confirmation to the user
     await mailTransporter.sendMail({
       to: user.email,
@@ -117,9 +124,20 @@ export const updateUserProfile = async (req, res, next) => {
     await mailTransporter.sendMail({
       to: updatedVendor.email,
       subject: "Profile Update Notice",
-      text: `Hello ${updatedVendor.name}, your profile was successfully updated at ${updateTime}.`
+      text: `Hello ${updatedVendor.name}, your profile was successfully updated at ${updateTime}.`,
     });
-    
+    // Send push notification if user has fcmToken
+    if (updatedVendor.fcmToken) {
+      const payload = {
+        notification: {
+          title: "Profile Update Notice",
+          body: `Hello ${updatedVendor.name}, your profile was successfully updated at ${updateTime}.`,
+        },
+        token: updatedVendor.fcmToken,
+      };
+      await admin.messaging().send(payload);
+    }
+
     //Send the updated vendor profile
     res.json("Profile updated successfully");
   } catch (error) {
@@ -144,8 +162,8 @@ export const deleteUser = async (req, res, next) => {
     await mailTransporter.sendMail({
       to: user.email,
       subject: "Delete Account",
-      text: `Hello ${user.name}, you deletd your Pusham account at ${deleteTime}.`
-    });  
+      text: `Hello ${user.name}, you deletd your Pusham account at ${deleteTime}.`,
+    });
 
     // Send success response
     res.status(200).json({ message: "User deleted successfully" });
