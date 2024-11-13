@@ -89,7 +89,7 @@ export const updateTicket = async (req, res, next) => {
   try {
     const { error, value } = updateTicketValidator.validate(req.body);
     if (error) {
-      return res.status(404).json("No data to update");
+      return res.status(404).json("validation error");
     }
     const updateTicket = await TicketModel.findByIdAndUpdate(
       { _id: req.params.id, user: req.auth.id },
