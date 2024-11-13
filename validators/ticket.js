@@ -22,6 +22,7 @@ export const addTicketValidator = Joi.object({
     ),
     notification: Joi.string()
 
+
 });
 
 export const updateTicketValidator = Joi.object({

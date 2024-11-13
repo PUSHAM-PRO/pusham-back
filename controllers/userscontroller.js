@@ -106,7 +106,7 @@ export const updateUserProfile = async (req, res, next) => {
       req.auth.id,
       value,
       { new: true }
-    );
+    );   
     if (!updatedVendor) {
       return res.status(404).json({ message: "user not found" });
     }
