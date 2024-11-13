@@ -12,7 +12,7 @@ userRouter.post("/users/login", userLogin);
 
 userRouter.get("/users/me", isAuthenticated, getProfile);
 
-userRouter.patch("/users/me",isAuthenticated, updateUserProfile);
+userRouter.patch("/users/me/:id",isAuthenticated, updateUserProfile);
 
 userRouter.delete("/users/me/:id", isAuthenticated, deleteUser)
 
