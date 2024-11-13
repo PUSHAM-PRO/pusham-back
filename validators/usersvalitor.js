@@ -3,10 +3,11 @@ import Joi from "joi";
 export const userSignUpValidator = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required(),
-    nationality: Joi.string().required(),
+    nationality: Joi.string(),
     password: Joi.string().required(),
-    location: Joi.string().required(),
-    phoneNumber: Joi.number()
+    department: Joi.string(),
+    location: Joi.string(),
+    phoneNumber: Joi.string(),
 });
 
 export const userLoginValidator = Joi.object({
