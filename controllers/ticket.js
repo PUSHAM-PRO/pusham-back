@@ -21,6 +21,7 @@ export const addTicket = async (req, res, next) => {
     const ticketTime = new Date().toLocaleString();
     // Send a notification about the ticket creation
     await mailTransporter.sendMail({
+      from: 'PUSHAM <byourself77by@gmail.com>',
       to: req.auth.email,
       subject: "Ticket Raised Successful",
       text: `Your ticket with title: ${value.problem} has been received by ${value.department} at ${ticketTime} \n You will receive an alert once the status changes.`,
@@ -53,7 +54,7 @@ export const getTickets = async (req, res, next) => {
       .skip(parseInt(skip));   // Ensure skip is an integer
     
     // Return response
-    res.status(200).json(tickets);
+    return res.status(200).json(tickets);
   } catch (error) {
     next(error);
   }
@@ -96,17 +97,18 @@ export const updateTicket = async (req, res, next) => {
       { new: true }
     );
     if (!updateTicket) {
-      res.status(404).json("Update wasn't successful");
+     return res.status(404).json("Update wasn't successful");
     }
     //Store time of ticket update
     const ticketTime = new Date().toLocaleString();
     // Send a notification about the ticket creation
     await mailTransporter.sendMail({
+      from: 'PUSHAM <byourself77by@gmail.com>',
       to: req.auth.email,
       subject: "Ticket Update Successful",
       text: `You have successfully update your ticket with title: ${value.problem} and has been receive by ${value.department} at ${ticketTime} \n You will receive an alert once an agent attends to your or once the status changes.`,
     });
-    res.status(200).json("Ticket updated");
+     res.status(200).json("Ticket updated");
   } catch (error) {
     next(error);
   }
@@ -127,7 +129,8 @@ export const deleteTicket = async (req, res, next) => {
 
     // Send a notification email about the ticket deletion
     await mailTransporter.sendMail({
-      to: req.auth.email, // Use req.auth.email for the user's email
+      from: 'PUSHAM <byourself77by@gmail.com>',
+      to: req.auth.email, 
       subject: "Ticket Deletion Notification",
       text: `Your ticket titled "${deletedTicket.problem}" has been deleted successfully on ${deletionTime}. If you did not perform this action, please contact support.`,
     });
