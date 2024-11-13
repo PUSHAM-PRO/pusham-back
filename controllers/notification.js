@@ -2,6 +2,8 @@ import { NotificationModel } from "../models/notification.js";
 import notificationValidator from "../validators/notification.js";
 import { UserModel } from "../models/usermodels.js";
 import { mailTransporter } from "../utils/mail.js";
+import { generateEmailTemplate } from "../utils/templates.js";
+
 
 //Role: department and superAdmins to all users
 export const sendNotification = async (req, res, next) => {
@@ -20,16 +22,21 @@ export const sendNotification = async (req, res, next) => {
         const { location } = req.body
 
         // Retrieve emails of users with the role of 'customer'
-        const customers = await UserModel.find({ role: 'customer', location }, 'email');
+        const customers = await UserModel.find({ role: 'customer', location }, 'name email');
 
-
-        // Send a notification email to each user
+        // Send a personalized notification email to each user
         const sendNotifications = customers.map(async (customer) => {
+            const emailContent = `
+              <p>Dear ${customer.name},</p>
+              <p>${notify.message}</p>
+              <p style="color: #4CAF50;">Thank you for staying connected with us!</p>
+            `;
+
             return mailTransporter.sendMail({
-                from: 'PUSHAM <byourself77by@gmail.com>',//Test successful||all customer with the same location in the req.body receives the power update notification
+                from: 'PUSHAM <byourself77by@gmail.com>',
                 to: customer.email,
                 subject: notify.title,
-                text: notify.message
+                html: generateEmailTemplate(emailContent)
             });
         });
 

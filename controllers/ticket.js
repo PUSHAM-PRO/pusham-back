@@ -1,6 +1,7 @@
 import { TicketModel } from "../models/ticket.js";
 import { addTicketValidator, updateTicketValidator, } from "../validators/ticket.js";
 import { mailTransporter } from "../utils/mail.js";
+import { generateEmailTemplate } from "../utils/templates.js";
 
 export const addTicket = async (req, res, next) => {
   try {
@@ -13,18 +14,22 @@ export const addTicket = async (req, res, next) => {
       ...value,
       user: req.auth.id,
     });
-    // const userEmail = req.auth.email; // Assume req.auth contains email as well
-    // if (!userEmail) {
-    //   res.status(404).json("User email not found.");
-    // }
     //Store time of post of ticket
     const ticketTime = new Date().toLocaleString();
+
+    //Email content goes here
+    const emailContent = `
+              <p>Dear Customer</p>
+              <p>Your ticket with title: ${value.problem} has been received by ${value.department} at ${ticketTime} \n You will receive an alert once the status changes.</p>
+              <p style="color: #4CAF50;">Thank you for staying connected with us!</p>
+            `;
+
     // Send a notification about the ticket creation
     await mailTransporter.sendMail({
       from: 'PUSHAM <byourself77by@gmail.com>',
       to: req.auth.email,
       subject: "Ticket Raised Successful",
-      text: `Your ticket with title: ${value.problem} has been received by ${value.department} at ${ticketTime} \n You will receive an alert once the status changes.`,
+      html: generateEmailTemplate(emailContent)
     });
 
     //respond to request
