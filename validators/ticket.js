@@ -2,8 +2,8 @@ import Joi from "joi";
 
 export const addTicketValidator = Joi.object({
 
-    department: Joi.string().required(),
-    location: Joi.string().required(),
+    department: Joi.string(),//superAdmin
+    location: Joi.string(),
     problem: Joi.string().required(),
     description: Joi.string().required(),
     photo: Joi.string(),
