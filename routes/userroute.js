@@ -14,6 +14,6 @@ userRouter.get("/users/me", isAuthenticated, getProfile);
 
 userRouter.patch("/users/me",isAuthenticated, updateUserProfile);
 
-userRouter.delete("/users/me/:id", isAuthenticated, deleteUser)
+userRouter.delete("/users/me/", isAuthenticated, deleteUser)
 
 export default userRouter;

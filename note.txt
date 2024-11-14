@@ -2,4 +2,10 @@ notification for :
 USER sign up, login, update, delete
 TICKET addtickets, updateTicket
 
-
+{
+  "department": "Maintenance",
+  "location": "Southern Cameroon",
+  "problem": "Power Outage",
+  "description": "There is a scheduled power outage affecting multiple areas. Please address this issue urgently.",
+  "photo": "http://example.com/photo.jpg"
+}
