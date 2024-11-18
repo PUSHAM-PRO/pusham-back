@@ -7,7 +7,8 @@ export const userSignUpValidator = Joi.object({
     password: Joi.string().required(),
     department: Joi.string(),
     location: Joi.string(),
-    phoneNumber: Joi.number()
+    phoneNumber: Joi.number(),
+    role: Joi.string()
 });
 
 export const userLoginValidator = Joi.object({
@@ -22,5 +23,13 @@ export const userUpdateValidator = Joi.object({
     password: Joi.string(),
     location: Joi.string(),
     phoneNumber: Joi.number(),
-    fcmToken: Joi.string()
+    fcmToken: Joi.string(),
+    role: Joi.string(),
+    role: Joi.string(),
+    category: Joi.string().valid(
+      'technical support',
+      'billing',
+      'account management',
+      'sales enquiry'
+  ),
 });

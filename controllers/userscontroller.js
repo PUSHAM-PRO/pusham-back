@@ -19,7 +19,7 @@ export const userSignup = async (req, res, next) => {
     //  check the database if the email exist already
     const user = await UserModel.findOne({ email: value.email });
     if (user) {
-      return res.status(200).json("user already exist");
+      return res.status(409).json("user already exist");
     }
     const hashedpassword = bcrypt.hashSync(value.password, 10);
     // save to database

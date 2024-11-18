@@ -1,36 +1,40 @@
 import { Schema, model, Types } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
 
-const notificationSchema = new Schema({
+const notificationSchema = new Schema(
+  {
     type: {
-        type: String,
-        enum: ['Ticket Update','Power Outage', 'Admin Message', 'Department Alert'],
-        required: true
+      type: String,
+      enum: [
+        "Ticket Update",
+        "Power Outage",
+        "Admin Message",
+        "Department Alert",
+      ],
+      required: true,
     },
     title: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     message: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-    location: {type: String
-    },
+    location: { type: String },
     image: {
-        type: String
+      type: String,
     },
     read: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
-
-}, 
-{
-    timestamps: true
-});
+  },
+  {
+    timestamps: true,
+  }
+);
 
 notificationSchema.plugin(toJSON);
 
-export const NotificationModel = model('Notification', notificationSchema);
-
+export const NotificationModel = model("Notification", notificationSchema);

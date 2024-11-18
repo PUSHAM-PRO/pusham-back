@@ -1,4 +1,5 @@
 import { TicketModel } from "../models/ticket.js";
+import { UserModel } from "../models/usermodels.js";
 import {
   addTicketValidator,
   updateTicketValidator,
@@ -8,7 +9,10 @@ import { generateEmailTemplate } from "../utils/templates.js";
 
 export const addTicket = async (req, res, next) => {
   try {
-    const { error, value } = addTicketValidator.validate(req.body);
+    const { error, value } = addTicketValidator.validate({
+      ...req.body,
+      photo: req.file?.filename
+    });
     if (error) {
       return res.status(422).json(error);
     }
@@ -68,6 +72,28 @@ export const getTickets = async (req, res, next) => {
   }
 };
 
+export const getTicketsByUser = async (req, res, next) => {
+  try {
+    const { filter = "{}", sort = "{}", limit = 10, skip = 0, category } = req.query;
+    
+    // Fetch tickets from database
+    const tickets = await TicketModel
+    .find({
+      ...JSON.parse(filter),
+      user: req.auth.id,
+      ...(category && { category }),
+    })
+      .sort(JSON.parse(sort))
+      .limit(parseInt(limit))
+      .skip(parseInt(skip));
+    
+    // Return response
+    return res.status(200).json(tickets);
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 export const countTickets = async (req, res, next) => {
   try {
@@ -95,28 +121,41 @@ export const getticket = async (req, res, next) => {
 
 export const updateTicket = async (req, res, next) => {
   try {
-    const { error, value } = updateTicketValidator.validate(req.body);
+    // validate input data
+    const { error, value } = updateTicketValidator.validate({
+      ...req.body,
+      photo: req.file?.filename || req.body.photo,
+    });
+
     if (error) {
-      return res.status(404).json("validation error");
+      return res.status(400).json({ message: "Validation error", details: error.details });
     }
-    const updateTicket = await TicketModel.findByIdAndUpdate(
+    // check if there is user in the User model
+    const assignedUser = await UserModel.findById(value.assignedTo);
+    if (!assignedUser) {
+      return res.status(400).json({ message: "Assigned user not found" });
+    }
+
+    const updateTicket = await TicketModel.findOneAndUpdate(
       { _id: req.params.id, user: req.auth.id },
-      { ...req.body },
+      { ...value },
       { new: true }
     );
+
     if (!updateTicket) {
-     return res.status(404).json("Update wasn't successful");
+      return res.status(404).json("Update wasn't successful");
     }
-    //Store time of ticket update
+
     const ticketTime = new Date().toLocaleString();
-    // Send a notification about the ticket creation
+
     await mailTransporter.sendMail({
       from: 'PUSHAM <byourself77by@gmail.com>',
       to: req.auth.email,
       subject: "Ticket Update Successful",
-      text: `You have successfully update your ticket with title: ${value.problem} and has been receive by ${value.department} at ${ticketTime} \n You will receive an alert once an agent attends to your or once the status changes.`,
+      text: `You have successfully updated your ticket with title: "${value.problem}" and it has been received by ${value.department} at ${ticketTime}. \nYou will receive an alert once an agent attends to it or once the status changes.`,
     });
-     res.status(200).json("Ticket updated");
+
+    res.status(200).json("Ticket updated");
   } catch (error) {
     next(error);
   }
@@ -224,3 +263,28 @@ export const getTicketCounts = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getTicketCountsUser = async (req, res, next) => {
+  try {
+    const { filter = "{}" } = req.query;
+    const userFilter = { ...JSON.parse(filter), user: req.auth.id };
+    // Count total tickets
+    const totalTickets = await TicketModel.countDocuments(userFilter);
+
+    // Count tickets that are in progress
+    const inProgressTickets = await TicketModel.countDocuments({ ...userFilter, status: 'in progress' });
+
+    // Count tickets that are completed
+    const completedTickets = await TicketModel.countDocuments({ ...userFilter, status: 'completed' });
+
+    // Return counts to the client
+    res.status(200).json({
+      totalTickets,
+      inProgressTickets,
+      completedTickets
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

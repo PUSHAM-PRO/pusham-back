@@ -22,7 +22,7 @@ const userSchema = new Schema(
     //     // ref: 'Notification'
     //   },
     // ],
-    fcmToken: { type: String },
+    // fcmToken: { type: String },
   },
   {
     timestamps: true,
