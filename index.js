@@ -13,7 +13,10 @@ import documentRouter from "./routes/document.js";
 // });
 
 // connect mongodb
-await mongoose.connect(process.env.MONGO_URI);
+await mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("Db connection successful"))
+  .catch((error) => console.log("Error connecting to DB", error));
 
 //  create an express app
 const app = express();

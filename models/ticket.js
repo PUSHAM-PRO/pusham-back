@@ -1,7 +1,10 @@
 import { Schema, model, Types } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
-import category from "./category.json" assert { type: "json" };
-
+// import category from "./category.json" assert { type: "json" };
+import {readFile} from 'fs/promises'
+const category = JSON.parse(
+  await readFile(new URL('./category.json', import.meta.url))
+)
 const ticketSchema = new Schema(
   {
     user: { type: Types.ObjectId, ref: "User" },
