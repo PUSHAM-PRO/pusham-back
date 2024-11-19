@@ -34,4 +34,10 @@ export const updateTicketValidator = Joi.object({
     description: Joi.string().required(),
     photo: Joi.string(),
     status: Joi.string(),
+    AssignedAgent: Joi.string(),
+    dateSubmission: Joi.string(),
+    dateExecution: Joi.string(),
+    priority: Joi.string(),
+    type: Joi.string(),
+   
 });
