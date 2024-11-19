@@ -34,5 +34,5 @@ export const updateTicketValidator = Joi.object({
   status: Joi.string().valid("initialized", "in_progress", "completed"),
   priority: Joi.string().valid("low", "medium", "high", "highest"),
   type: Joi.string(),
-  assignedTo: Joi.string().required(),
+  assignedTo: Joi.string(),
 });

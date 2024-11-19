@@ -131,7 +131,6 @@ export const updateUserProfile = async (req, res, next) => {
     // Store the time of profile update
     const updateTime = new Date().toLocaleString();
 
-    //Content of the html for the email
     const emailContent = `
               <p>Dear ${value.name},</p>
               <p>Hello ${updatedVendor.name}, your profile was successfully updated at ${updateTime}.\n 
@@ -139,7 +138,6 @@ export const updateUserProfile = async (req, res, next) => {
               <p style="color: #4CAF50;">Thank you for staying with PUSHAM!</p>
             `;
     
-    // Send a notification about profile update
     await mailTransporter.sendMail({
       from: 'PUSHAM <byourself77by@gmail.com>',
       to: value.email,
