@@ -10,6 +10,7 @@ const userSchema = new Schema(
     department: { type: String },
     nationality: { type: String },
     phoneNumber: { type: Number },
+    profileImage: { type: Number },
     role: {
       type: String, 
       enum: ['customer', 'agent', 'department', 'superadmin'],
@@ -22,6 +23,7 @@ const userSchema = new Schema(
     //     // ref: 'Notification'
     //   },
     // ],
+    // fcmToken: { type: String },
   },
   {
     timestamps: true,

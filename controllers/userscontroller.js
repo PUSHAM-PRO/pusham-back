@@ -7,18 +7,22 @@ import {
 } from "../validators/usersvalitor.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { signupEmailTemplate, loginEmailTemplate, updateEmailTemplate } from "../utils/templates.js";
 
 export const userSignup = async (req, res, next) => {
   try {
     // checking if inputed details are correct
-    const { error, value } = userSignUpValidator.validate(req.body);
+    const { error, value } = userSignUpValidator.validate({
+      ...req.body,
+      profileImage: req.file?.file
+    });
     if (error) {
       return res.status(422).json(error);
     }
     //  check the database if the email exist already
     const user = await UserModel.findOne({ email: value.email });
     if (user) {
-      return res.status(200).json("user already exist");
+      return res.status(409).json("user already exist");
     }
     const hashedpassword = bcrypt.hashSync(value.password, 10);
     // save to database
@@ -26,14 +30,18 @@ export const userSignup = async (req, res, next) => {
       ...value,
       password: hashedpassword,
     });
+
+    //Content of the html for the email
+    const emailContent = `
+              <p>Dear ${value.name},</p>
+              <p style="color: #4CAF50;">Thank you for registering with PUSHAM!</p>
+            `;
+
     await mailTransporter.sendMail({
+      from: 'PUSHAM <byourself77by@gmail.com>',
       to: value.email,
       subject: "User registration",
-      text: `Hello ${ value.name}, you have registered with PUSHAM successfully, \nHere are your details,\n ${JSON.stringify(
-        value,
-        null,
-        2
-      )}`,
+      html: signupEmailTemplate(emailContent)
     });
     return res.status(200).json("User Registered Successfully");
   } catch (error) {
@@ -59,9 +67,13 @@ export const userLogin = async (req, res, next) => {
       res.status(404).json("Invalid Credentials");
     }
     // now generate a token for the person
-    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_PRIVATE_KEY, {
-      expiresIn: "24h",
-    });
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_PRIVATE_KEY,
+      {
+        expiresIn: "24h",
+      }
+    );
 
     //send response back to the user  with the access token
     res.json({
@@ -70,13 +82,22 @@ export const userLogin = async (req, res, next) => {
     });
     //get current timestamp for the login
 const loginTime = new Date().toLocaleString();
+
+    //Content of the html for the email
+    const emailContent = `
+              <p>Dear ${user.name},</p>
+              <p>We noticed you logged in at ${loginTime}.\n 
+      Welcome back to Pusham \n 
+      If this was not from you, kindly change your password as soon as possible or reach out to customer support</>
+              <p style="color: #4CAF50;">Thank you for staying with PUSHAM!</p>
+            `;
+
     //send a login confirmation to the user
     await mailTransporter.sendMail({
-      to: user.email,
-      subject: "Login Notice",
-      text: `Hello ${user.name} we noticed you logged in at ${loginTime}.\n 
-      Welcome to Pusham \n 
-      If this was not from you, kindly change your password as soon as possible`,
+      from: 'PUSHAM <byourself77by@gmail.com>',
+      to: value.email,
+      subject: "User Login Update ",
+      html: loginEmailTemplate(emailContent)
     });
   } catch (error) {
     next(error);
@@ -113,13 +134,31 @@ export const updateUserProfile = async (req, res, next) => {
     // Store the time of profile update
     const updateTime = new Date().toLocaleString();
 
-    // Send a notification about profile update
-    await mailTransporter.sendMail({
-      to: updatedVendor.email,
-      subject: "Profile Update Notice",
-      text: `Hello ${updatedVendor.name}, your profile was successfully updated at ${updateTime}.`
-    });
+    const emailContent = `
+              <p>Dear ${value.name},</p>
+              <p>Hello ${updatedVendor.name}, your profile was successfully updated at ${updateTime}.\n 
+      If this was not from you, kindly change your password as soon as possible or reach out to customer support</>
+              <p style="color: #4CAF50;">Thank you for staying with PUSHAM!</p>
+            `;
     
+    await mailTransporter.sendMail({
+      from: 'PUSHAM <byourself77by@gmail.com>',
+      to: value.email,
+      subject: "User Login Update ",
+      html: updateEmailTemplate(emailContent)
+    });
+    // Send push notification if user has fcmToken
+    if (updatedVendor.fcmToken) {
+      const payload = {
+        notification: {
+          title: "Profile Update Notice",
+          body: `Hello ${updatedVendor.name}, your profile was successfully updated at ${updateTime}.`,
+        },
+        token: updatedVendor.fcmToken,
+      };
+      await admin.messaging().send(payload);
+    }
+
     //Send the updated vendor profile
     res.json("Profile updated successfully");
   } catch (error) {
@@ -144,8 +183,8 @@ export const deleteUser = async (req, res, next) => {
     await mailTransporter.sendMail({
       to: user.email,
       subject: "Delete Account",
-      text: `Hello ${user.name}, you deletd your Pusham account at ${deleteTime}.`
-    });  
+      text: `Hello ${user.name}, you deletd your Pusham account at ${deleteTime}.`,
+    });
 
     // Send success response
     res.status(200).json({ message: "User deleted successfully" });

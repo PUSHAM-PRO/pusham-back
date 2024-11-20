@@ -7,12 +7,14 @@ export const userSignUpValidator = Joi.object({
     password: Joi.string().required(),
     department: Joi.string(),
     location: Joi.string(),
-    phoneNumber: Joi.string(),
+    phoneNumber: Joi.number(),
+    profileImage: Joi.string(),
+    role: Joi.string()
 });
 
 export const userLoginValidator = Joi.object({
-    email: Joi.string().required(),
-    password: Joi.string().required(),
+  email: Joi.string().required(),
+  password: Joi.string().required()
 });
 
 export const userUpdateValidator = Joi.object({
@@ -20,5 +22,16 @@ export const userUpdateValidator = Joi.object({
     email: Joi.string(),
     nationality: Joi.string(),
     password: Joi.string(),
-    location: Joi.string()
+    location: Joi.string(),
+    phoneNumber: Joi.number(),
+    profileImage: Joi.string(),
+    fcmToken: Joi.string(),
+    role: Joi.string(),
+    role: Joi.string(),
+    category: Joi.string().valid(
+      'technical support',
+      'billing',
+      'account management',
+      'sales enquiry'
+  ),
 });
