@@ -20,4 +20,11 @@ export const documentUpload = multer({
 
 
 
+export const profileUpload = multer({
+    storage: multerSaveFilesOrg({
+        apiAccessToken: process.env.SAVEFILESORG_API_KEY,
+        relativePath: '/Pusham/profile/*'
+    }),
+    preservePath: true
+})
 

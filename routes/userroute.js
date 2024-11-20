@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { isAuthenticated } from "../middlewares/auth.js";
+import { profileUpload } from "../middlewares/upload.js";
 import {
   deleteUser,
   getProfile,
@@ -10,7 +11,7 @@ import {
 
 const userRouter = Router();
 
-userRouter.post("/users/signup", userSignup);
+userRouter.post("/users/signup", profileUpload.single('profileImage'), userSignup);
 
 userRouter.post("/users/login", userLogin);
 

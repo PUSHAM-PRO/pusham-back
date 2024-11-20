@@ -12,7 +12,10 @@ import { signupEmailTemplate, loginEmailTemplate, updateEmailTemplate } from "..
 export const userSignup = async (req, res, next) => {
   try {
     // checking if inputed details are correct
-    const { error, value } = userSignUpValidator.validate(req.body);
+    const { error, value } = userSignUpValidator.validate({
+      ...req.body,
+      profileImage: req.file?.file
+    });
     if (error) {
       return res.status(422).json(error);
     }

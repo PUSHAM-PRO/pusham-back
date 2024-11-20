@@ -8,6 +8,7 @@ export const userSignUpValidator = Joi.object({
     department: Joi.string(),
     location: Joi.string(),
     phoneNumber: Joi.number(),
+    profileImage: Joi.string(),
     role: Joi.string()
 });
 
@@ -23,6 +24,7 @@ export const userUpdateValidator = Joi.object({
     password: Joi.string(),
     location: Joi.string(),
     phoneNumber: Joi.number(),
+    profileImage: Joi.string(),
     fcmToken: Joi.string(),
     role: Joi.string(),
     role: Joi.string(),
