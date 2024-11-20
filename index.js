@@ -4,7 +4,10 @@ import cors from "cors";
 import userRouter from "./routes/userroute.js";
 import ticketRouter from "./routes/ticket.js";
 import admin from "firebase-admin";
-import serviceAccount from "./pushKey.json" assert { type: "json" };
+import { readFile } from "fs/promises";
+const serviceAccount = JSON.parse(
+  await readFile(new URL("./pushKey.json", import.meta.url))
+)
 import notificationRouter from "./routes/notification.js";
 import documentRouter from "./routes/document.js";
 
