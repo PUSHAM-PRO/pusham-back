@@ -148,16 +148,16 @@ export const updateUserProfile = async (req, res, next) => {
       html: updateEmailTemplate(emailContent)
     });
     // Send push notification if user has fcmToken
-    if (updatedVendor.fcmToken) {
-      const payload = {
-        notification: {
-          title: "Profile Update Notice",
-          body: `Hello ${updatedVendor.name}, your profile was successfully updated at ${updateTime}.`,
-        },
-        token: updatedVendor.fcmToken,
-      };
-      await admin.messaging().send(payload);
-    }
+    // if (updatedVendor.fcmToken) {
+    //   const payload = {
+    //     notification: {
+    //       title: "Profile Update Notice",
+    //       body: `Hello ${updatedVendor.name}, your profile was successfully updated at ${updateTime}.`,
+    //     },
+    //     token: updatedVendor.fcmToken,
+    //   };
+    //   await admin.messaging().send(payload);
+    // }
 
     //Send the updated vendor profile
     res.json("Profile updated successfully");
