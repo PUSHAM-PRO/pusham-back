@@ -14,7 +14,7 @@ export const addTicketValidator = Joi.object({
     "account management",
     "sales enquiry"
   ),
-  assignedTo: Joi.string().required(),
+  assignedTo: Joi.string(),
 });
 
 export const updateTicketValidator = Joi.object({
