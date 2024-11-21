@@ -48,7 +48,7 @@ export const addTicket = async (req, res, next) => {
 
 export const getTickets = async (req, res, next) => {
   try {
-    const { filter = "{}", sort = "{}", limit = 10, skip = 0, category } = req.query;
+    const { filter = "{}", sort = "{}", limit = 100, skip = 0, category } = req.query;
     
     // Merge category filter if it exists
     // const userFilter = { ..., user: req.auth.id };
