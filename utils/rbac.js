@@ -5,7 +5,8 @@ export const permissions = [
             "addTickets",
             "getTicket",
             "getTicketsByUser",
-            "countUserTickets"
+            "countUserTickets",
+            "deleteTickets"
         ]
     },
     {
